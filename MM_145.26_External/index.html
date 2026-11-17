@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MM 145.26 — Machinery Pass Separation</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#faf7f1;
+    --panel:#ffffff;
+    --ink:#2b2824;
+    --ink-soft:#716a60;
+    --rule:#e4ddd0;
+    --accent:#a8632c;
+    --accent-soft:#f2e3d2;
+    --pin:#c9742f;
+    --pin-feature:#5b6e4f;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:'Inter',system-ui,sans-serif;
+    font-size:16px;
+    line-height:1.55;
+  }
+  h1,h2,h3{
+    font-family:'Inter',system-ui,sans-serif;
+    font-weight:700;
+    letter-spacing:-0.01em;
+    margin:0 0 .5em;
+    text-wrap:balance;
+  }
+  .wrap{max-width:980px;margin:0 auto;padding:0 24px;}
+  a{color:var(--accent);}
+
+  /* Header */
+  header.hero{padding:56px 0 0;}
+  .mm-label{
+    font-size:13px;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    color:var(--ink-soft);
+    margin-bottom:6px;
+  }
+  .mm-number{
+    font-family:'Inter',system-ui,sans-serif;
+    font-size:clamp(40px,7vw,64px);
+    font-weight:700;
+    line-height:1;
+    margin:0;
+  }
+  .mm-type{
+    font-size:17px;
+    color:var(--ink-soft);
+    margin-top:8px;
+  }
+  .cover-wrap{margin:32px 0 0;}
+  .cover-wrap img{
+    width:100%;
+    height:clamp(260px,42vw,460px);
+    object-fit:cover;
+    display:block;
+    border-radius:4px;
+  }
+  .cover-extra{
+    display:flex;
+    align-items:flex-start;
+    gap:12px;
+    margin-top:12px;
+  }
+  .cover-extra img{
+    height:280px;
+    width:auto;
+    max-width:100%;
+    flex:0 0 auto;
+    display:block;
+    border-radius:4px;
+    cursor:pointer;
+  }
+  @media(max-width:640px){
+    .cover-extra{flex-wrap:wrap;}
+    .cover-extra img{height:180px;}
+  }
+
+  section{padding:56px 0;border-top:1px solid var(--rule);}
+  section:first-of-type{border-top:none;}
+  #existing-sections{border-top:none;padding-top:0;}
+  section h2{font-size:26px;}
+
+  /* Fact sheet */
+  .factgrid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    gap:28px 36px;
+    margin-top:28px;
+  }
+  .fact-block h3{
+    font-family:'Inter',sans-serif;
+    font-weight:600;
+    font-size:13px;
+    text-transform:uppercase;
+    letter-spacing:.06em;
+    color:var(--ink-soft);
+    margin-bottom:10px;
+  }
+  .fact-row{display:flex;justify-content:space-between;gap:12px;padding:6px 0;border-bottom:1px solid var(--rule);font-size:14.5px;}
+  .fact-row:last-child{border-bottom:none;}
+  .fact-row .k{color:var(--ink-soft);}
+  .fact-row .v{text-align:right;font-weight:500;}
+  .fact-row .v a{color:var(--accent);text-decoration:none;}
+  .fact-row .v a:hover{text-decoration:underline;}
+  .desc{
+    margin:28px 0 0;
+    padding:16px 20px;
+    background:transparent;
+    border:1px dashed var(--rule);
+    border-radius:4px;
+    font-size:14px;
+    color:var(--ink-soft);
+    font-style:italic;
+  }
+  .stip-note{
+    margin-top:28px;
+  }
+  .stip-note h3{
+    font-family:'Inter',sans-serif;
+    font-weight:600;
+    font-size:13px;
+    text-transform:uppercase;
+    letter-spacing:.06em;
+    color:var(--ink-soft);
+    margin-bottom:10px;
+  }
+  .stip-card{
+    background:var(--panel);
+    border:1px solid var(--rule);
+    border-radius:6px;
+    padding:18px 20px;
+  }
+
+  /* Zoom box */
+  .maptools{display:flex;justify-content:flex-end;margin-bottom:12px;}
+  .zoombtn{
+    font-family:'Inter',sans-serif;
+    font-size:13.5px;
+    font-weight:500;
+    color:var(--ink);
+    background:var(--panel);
+    border:1px solid var(--rule);
+    border-radius:20px;
+    padding:8px 16px;
+    cursor:pointer;
+  }
+  .zoombtn:hover{border-color:var(--accent);color:var(--accent);}
+  .zbox{
+    position:relative;
+    overflow:hidden;
+    border-radius:6px;
+    border:1px solid var(--rule);
+    background:#000;
+  }
+  .zbox img{display:block;width:100%;height:auto;transition:transform .5s ease;}
+  .zbox.zoomed img{transform:scale(2.5);transform-origin:var(--ox,50%) var(--oy,50%);}
+
+  table.summary{width:100%;border-collapse:collapse;margin-top:22px;font-size:14.5px;}
+  table.summary th,table.summary td{text-align:left;padding:10px 14px;border-bottom:1px solid var(--rule);}
+  table.summary th{color:var(--ink-soft);font-weight:600;font-size:12.5px;text-transform:uppercase;letter-spacing:.04em;}
+  table.summary tr:last-child td{border-bottom:none;}
+
+  /* Site map + pins */
+  .sitebox{position:relative;border-radius:6px;overflow:hidden;border:1px solid var(--rule);}
+  .sitebox img{display:block;width:100%;height:auto;}
+  .pin{
+    position:absolute;
+    width:1px;height:1px;
+    cursor:pointer;
+  }
+  .pin::before{
+    /* direction arrow: points the way the photo was taken, rotated by --dir (compass degrees, north-up) */
+    content:'';
+    position:absolute;
+    left:0;top:0;
+    width:0;height:0;
+    border-left:6px solid transparent;
+    border-right:6px solid transparent;
+    border-bottom:15px solid var(--c);
+    transform-origin:50% 100%;
+    transform:translate(-50%,-100%) rotate(var(--dir,0deg));
+    filter:drop-shadow(0 1px 2px rgba(0,0,0,.45));
+  }
+  .pin::after{
+    /* base dot: the camera's GPS point */
+    content:'';
+    position:absolute;
+    left:0;top:0;
+    width:9px;height:9px;
+    margin:-4.5px 0 0 -4.5px;
+    border-radius:50%;
+    background:var(--c);
+    border:2px solid #fff;
+    box-shadow:0 1px 2px rgba(0,0,0,.4);
+  }
+  .pin.site{--c:var(--pin);}
+  .pin.feature{--c:var(--pin-feature);}
+  .legend-row{display:flex;gap:22px;margin-top:14px;font-size:13px;color:var(--ink-soft);flex-wrap:wrap;}
+  .legend-row span{display:inline-flex;align-items:center;gap:7px;}
+  .dot{width:10px;height:10px;border-radius:50%;display:inline-block;}
+  .dot.site{background:var(--pin);}
+  .dot.feature{background:var(--pin-feature);}
+
+  /* Trail cam grid */
+  .camgrid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+    gap:18px;
+    margin-top:28px;
+  }
+  .camgrid figure{margin:0;}
+  .camgrid img{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:6px;display:block;cursor:pointer;}
+  .camgrid figcaption{margin-top:8px;font-size:13px;color:var(--ink-soft);}
+
+  .sectiongrid{
+    display:flex;
+    flex-direction:row;
+    align-items:flex-start;
+    gap:24px;
+    margin-top:28px;
+  }
+  .sectiongrid figure{margin:0;min-width:0;}
+  .sectiongrid figure.sec-road{flex:186 0 0;}
+  .sectiongrid figure.sec-bridge{flex:423 0 0;}
+  .sectiongrid img{
+    width:100%;
+    height:auto;
+    display:block;
+    border:1px solid var(--rule);
+    border-radius:6px;
+    background:#fff;
+  }
+  .sectiongrid figcaption{margin-top:8px;font-size:13px;color:var(--ink-soft);}
+
+  .placeholder-frame{
+    margin-top:28px;
+    border:1px dashed var(--rule);
+    border-radius:6px;
+    min-height:220px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:var(--ink-soft);
+    font-size:14.5px;
+    background:var(--panel);
+  }
+  p.flag{
+    margin-top:14px;
+    font-size:14px;
+    color:var(--ink);
+  }
+  p.flag b{font-weight:600;}
+
+  /* Lightbox */
+  .lightbox{
+    position:fixed;inset:0;background:rgba(20,17,13,.92);
+    display:none;align-items:center;justify-content:center;
+    z-index:50;padding:32px;flex-direction:column;
+  }
+  .lightbox.open{display:flex;}
+  .lightbox img{max-width:92vw;max-height:80vh;border-radius:4px;}
+  .lightbox .cap{color:#f2ece1;margin-top:14px;font-size:14px;}
+  .lightbox .close{position:absolute;top:22px;right:28px;color:#f2ece1;font-size:28px;cursor:pointer;background:none;border:none;line-height:1;}
+
+  footer{padding:40px 0 64px;font-size:12.5px;color:var(--ink-soft);}
+
+  @media(max-width:640px){
+    .fact-row .v{text-align:right;}
+    section{padding:40px 0;}
+    .sectiongrid{flex-direction:column;}
+    .sectiongrid figure.sec-road,.sectiongrid figure.sec-bridge{flex:0 0 auto;width:100%;}
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="mm-label">Mile Marker</div>
+    <h1 class="mm-number">145.26</h1>
+    <div class="mm-type">Machinery Pass &middot; Bridge</div>
+    <div class="cover-wrap">
+      <img src="img/site-cover.jpg" alt="Cover photo of the MM 145.26 machinery pass underpass">
+    </div>
+  </div>
+</header>
+
+<section id="fact-sheet">
+  <div class="wrap">
+    <h2>Fact sheet</h2>
+    <div class="factgrid">
+      <div class="fact-block">
+        <h3>Structure</h3>
+        <div class="fact-row"><span class="k">Name</span><span class="v">Machinery Pass Separation</span></div>
+        <div class="fact-row"><span class="k">Type (by function)</span><span class="v">Machinery Pass</span></div>
+        <div class="fact-row"><span class="k">Type (by design)</span><span class="v">Bridge</span></div>
+        <div class="fact-row"><span class="k">Structure design</span><span class="v">01 Slab</span></div>
+        <div class="fact-row"><span class="k">Year built</span><span class="v">1960</span></div>
+        <div class="fact-row"><span class="k">Condition</span><span class="v">Poor</span></div>
+        <div class="fact-row"><span class="k">County</span><span class="v">Sweetwater</span></div>
+        <div class="fact-row"><span class="k">Study region</span><span class="v">Red Desert</span></div>
+        <div class="fact-row"><span class="k">Location</span><span class="v"><a href="https://maps.app.goo.gl/MDJBdTUcqK22UyzF8" target="_blank" rel="noopener">View on Google Maps</a></span></div>
+      </div>
+      <div class="fact-block">
+        <h3>Jurisdiction &amp; ownership</h3>
+        <div class="fact-row"><span class="k">WYDOT District</span><span class="v">3</span></div>
+        <div class="fact-row"><span class="k">WYDOT State-owned bridge</span><span class="v">Yes</span></div>
+        <div class="fact-row"><span class="k">Owner, north side</span><span class="v">BLM (Public)</span></div>
+        <div class="fact-row"><span class="k">Owner, south side</span><span class="v">BLM (Public)</span></div>
+        <div class="fact-row"><span class="k">BLM Field Office</span><span class="v">Rock Springs</span></div>
+        <div class="fact-row"><span class="k">BLM Allotment</span><span class="v">Rock Springs</span></div>
+        <div class="fact-row"><span class="k">WFGD District, north</span><span class="v">Green River</span></div>
+        <div class="fact-row"><span class="k">WFGD District, south</span><span class="v">Baggs</span></div>
+        <div class="fact-row"><span class="k">Biologist, north</span><span class="v">Patrick Burke</span></div>
+        <div class="fact-row"><span class="k">Biologist, south</span><span class="v">Phil Damm</span></div>
+      </div>
+      <div class="fact-block">
+        <h3>Livestock use</h3>
+        <div class="fact-row"><span class="k">May use for domestic sheep or goat grazing (BLM)</span><span class="v">Yes</span></div>
+      </div>
+    </div>
+
+    <div class="stip-note">
+      <h3>WYDOT STIP</h3>
+      <div class="stip-card">
+        <div class="fact-row"><span class="k">Listed in STIP 2026&ndash;31</span><span class="v">Yes (listed as 145.30)</span></div>
+        <div class="fact-row"><span class="k">Project number</span><span class="v">B313007</span></div>
+        <div class="fact-row"><span class="k">Proposed year of construction</span><span class="v">2031</span></div>
+        <div class="fact-row"><span class="k">Character of work</span><span class="v">Bridge replacement</span></div>
+        <div class="fact-row"><span class="k">Description</span><span class="v">Replacement of existing bridge</span></div>
+        <div class="fact-row"><span class="k">Estimated cost</span><span class="v">$6,000,000</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="wildlife-use">
+  <div class="wrap">
+    <h2>Wildlife use</h2>
+    <div class="desc" style="margin-top:0; margin-bottom:28px;">The area adjacent to the structure is used by pronghorn and mule deer as documented through GPS tracking and recorded roadkill. The structure at MM 145.26 is used by pronghorn to cross the interstate as documented by monitoring with trail cameras. Some of the access to the crossing structure may be limited by the nearby railroad. The area around the crossing structures may see fewer collisions than the adjacent area without access to crossing structures.</div>
+    <div class="maptools">
+      <button class="zoombtn" id="zoomWildlife" type="button">Zoom to site</button>
+    </div>
+    <div class="zbox" id="wildlifeZbox" style="--ox:63.5%; --oy:52.8%;">
+      <img src="img/wildlife-use-map.jpg" alt="Wildlife use map showing pronghorn and deer crossings, roadkill, and documented structure crossings along this stretch of I-80">
+    </div>
+    <p class="cap" style="color:var(--ink-soft); font-size:13px; margin-top:10px;">Sources: Western Migrations, WYDOT, University of Wyoming.</p>
+
+    <table class="summary">
+      <thead>
+        <tr><th>Monitoring period</th><th>Data source</th><th>Metric</th><th>Result</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>August 2018 &ndash; June 2019</td><td>Ben Robb (MU12)</td><td>Days with pronghorn movement, autumn</td><td>14 (12.0% of ~117 monitored days)</td></tr>
+        <tr><td>August 2018 &ndash; June 2019</td><td>Ben Robb (MU12)</td><td>Days with pronghorn movement, spring</td><td>19 (22.0% of ~86 monitored days)</td></tr>
+      </tbody>
+    </table>
+
+  </div>
+</section>
+
+<section id="trail-cameras">
+  <div class="wrap">
+    <h2>Trail camera photos</h2>
+    <div class="camgrid">
+      <figure><img src="img/cam-07260487.jpg" data-cap="July 26, 2018" alt="Trail camera photo, July 26, 2018"><figcaption>July 26, 2018</figcaption></figure>
+      <figure><img src="img/cam-10110771.jpg" data-cap="October 11, 2018" alt="Trail camera photo, October 11, 2018"><figcaption>October 11, 2018</figcaption></figure>
+      <figure><img src="img/cam-06170412.jpg" data-cap="June 17, 2020" alt="Trail camera photo, June 17, 2020"><figcaption>June 17, 2020</figcaption></figure>
+      <figure><img src="img/cam-07020874.jpg" data-cap="July 2, 2020" alt="Trail camera photo, July 2, 2020"><figcaption>July 2, 2020</figcaption></figure>
+      <figure><img src="img/cam-07210458.jpg" data-cap="July 21, 2020" alt="Trail camera photo, July 21, 2020"><figcaption>July 21, 2020</figcaption></figure>
+    </div>
+  </div>
+</section>
+
+<section id="existing-site-map">
+  <div class="wrap">
+    <h2>Existing site map</h2>
+    <div class="desc" style="margin-top:0; margin-bottom:28px;">Today, the site facilitates pronghorn movement. While the structure's height, width and large open median allow for movement, existing fencing may be restricting access to the structure, and the existing livestock panel may be inhibiting passage when closed.</div>
+    <div class="sitebox" id="siteBox">
+      <img src="img/existing-site-map.jpg" alt="Existing site plan for MM 145.26 showing fence lines and features near the machinery pass underpass">
+      <div class="pin site" style="left:48.95%; top:63.79%; --dir:351.3deg;" data-img="img/site-cover.jpg" data-cap="Cover"></div>
+      <div class="pin site" style="left:48.98%; top:52.22%; --dir:4.1deg;" data-img="img/site-c-n.jpg" data-cap="Center, looking north"></div>
+      <div class="pin site" style="left:49.71%; top:52.16%; --dir:176.6deg;" data-img="img/site-c-s.jpg" data-cap="Center, looking south"></div>
+      <div class="pin site" style="left:50.76%; top:37.16%; --dir:185.8deg;" data-img="img/site-n.jpg" data-cap="North"></div>
+      <div class="pin site" style="left:52.59%; top:72.39%; --dir:320.5deg;" data-img="img/site-s.jpg" data-cap="South"></div>
+      <div class="pin feature" style="left:49.76%; top:41.15%; --dir:193.6deg;" data-img="img/fence-livestock-gate.jpg" data-cap="Livestock gate"></div>
+      <div class="pin feature" style="left:48.70%; top:61.34%; --dir:53.8deg;" data-img="img/fence-gap-1.jpg" data-cap="Fence gap/break"></div>
+      <div class="pin feature" style="left:49.93%; top:70.04%; --dir:313.8deg;" data-img="img/fence-segment-barbed.jpg" data-cap="Fence segment, barbed wire"></div>
+    </div>
+    <div class="legend-row">
+      <span><span class="dot site"></span>Site photo</span>
+      <span><span class="dot feature"></span>Fence feature</span>
+    </div>
+    <p class="cap" style="color:var(--ink-soft); font-size:13px; margin-top:16px;">Click on pins to see photos. Arrows show the direction each photo was taken.</p>
+  </div>
+</section>
+
+<section id="existing-sections">
+  <div class="wrap">
+    <h2>Existing sections</h2>
+    <div class="sectiongrid">
+      <figure class="sec-road">
+        <img src="img/section-road.jpg" data-cap="E-W Section at MM 145.26" alt="Roadway cross section at MM 145.26 showing a 30 foot gravel road and 22 foot soil embankments on each side, 74 feet total" style="cursor:pointer;">
+        <figcaption>E-W Section</figcaption>
+      </figure>
+      <figure class="sec-bridge">
+        <img src="img/section-bridge.jpg" data-cap="N-S Section at MM 145.26" alt="Structure elevation at MM 145.26 showing two 39 foot bridge structures 115 feet apart, 193 feet total, 16 feet tall" style="cursor:pointer;">
+        <figcaption>N-S Section</figcaption>
+      </figure>
+    </div>
+    <p class="flag"><b>Note:</b> all dimensions are approximate and to be verified in the field.</p>
+  </div>
+</section>
+
+<div class="lightbox" id="lightbox">
+  <button class="close" id="lbClose" aria-label="Close">&times;</button>
+  <img id="lbImg" src="" alt="">
+  <div class="cap" id="lbCap"></div>
+</div>
+
+<script>
+  // Zoom to site toggle (wildlife map only)
+  var zbox = document.getElementById('wildlifeZbox');
+  var zbtn = document.getElementById('zoomWildlife');
+  zbtn.addEventListener('click', function(){
+    zbox.classList.toggle('zoomed');
+    zbtn.textContent = zbox.classList.contains('zoomed') ? 'Show full map' : 'Zoom to site';
+  });
+
+  // Lightbox for pins and trail cam photos
+  var lb = document.getElementById('lightbox');
+  var lbImg = document.getElementById('lbImg');
+  var lbCap = document.getElementById('lbCap');
+  function openLightbox(src, cap){
+    lbImg.src = src;
+    lbCap.textContent = cap || '';
+    lb.classList.add('open');
+  }
+  document.getElementById('lbClose').addEventListener('click', function(){ lb.classList.remove('open'); });
+  lb.addEventListener('click', function(e){ if(e.target === lb) lb.classList.remove('open'); });
+
+  document.querySelectorAll('.pin').forEach(function(p){
+    p.addEventListener('click', function(){
+      openLightbox(p.getAttribute('data-img'), p.getAttribute('data-cap'));
+    });
+  });
+  document.querySelectorAll('.camgrid img, .sectiongrid img, .cover-extra img').forEach(function(img){
+    img.addEventListener('click', function(){
+      openLightbox(img.getAttribute('src'), img.getAttribute('data-cap'));
+    });
+  });
+
+  // Wildlife map: click to open full screen in the lightbox
+  var wildlifeImg = document.querySelector('#wildlifeZbox img');
+  wildlifeImg.style.cursor = 'pointer';
+  wildlifeImg.addEventListener('click', function(){
+    openLightbox(wildlifeImg.getAttribute('src'), 'Wildlife use map');
+  });
+
+  // Existing site map: click the base map (not a pin) to open full screen in the lightbox
+  var siteMapImg = document.querySelector('#siteBox img');
+  siteMapImg.style.cursor = 'pointer';
+  siteMapImg.addEventListener('click', function(){
+    openLightbox(siteMapImg.getAttribute('src'), 'Existing site map');
+  });
+</script>
+
+</body>
+</html>
