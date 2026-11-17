@@ -215,6 +215,13 @@
   .dot.site{background:var(--pin);}
   .dot.feature{background:var(--pin-feature);}
 
+
+  /* Hover preview for site photos */
+  .pin-preview{position:absolute;z-index:20;display:none;pointer-events:none;background:#fff;border:1px solid var(--rule);border-radius:6px;box-shadow:0 6px 20px rgba(0,0,0,.25);padding:6px;width:260px;}
+  .pin-preview img{display:block;width:auto;max-width:100%;height:auto;max-height:220px;margin:0 auto;border-radius:3px;}
+  .pin-preview div{font-size:12px;color:var(--ink-soft);margin-top:5px;}
+  .pin-preview.show{display:block;}
+
   /* Trail cam grid */
   .camgrid{
     display:grid;
@@ -407,7 +414,7 @@
     <div class="legend-row">
       <span><span class="dot site"></span>Site photo</span>
     </div>
-    <p class="cap" style="color:var(--ink-soft); font-size:13px; margin-top:16px;">Click on pins to see photos. Arrows show the direction each photo was taken. Pin positions are approximate.</p>
+    <p class="cap" style="color:var(--ink-soft); font-size:13px; margin-top:16px;">Hover over or click pins to see photos. Arrows show the direction each photo was taken. Pin positions are approximate.</p>
   </div>
 </section>
 
@@ -495,6 +502,32 @@
   var siteMapImg = document.querySelector('#siteBox img');
   siteMapImg.style.cursor = 'pointer';
   siteMapImg.addEventListener('click', function(){ openLightbox(siteMapImg.getAttribute('src'), 'Existing site map'); });
+
+  (function(){
+    var box = document.getElementById('siteBox');
+    if(!box || !window.matchMedia('(hover:hover)').matches) return;
+    var tip = document.createElement('div');
+    tip.className = 'pin-preview';
+    tip.innerHTML = '<img alt=""><div></div>';
+    box.appendChild(tip);
+    var tImg = tip.querySelector('img'), tCap = tip.querySelector('div');
+    box.querySelectorAll('.pin').forEach(function(p){
+      p.addEventListener('mouseenter', function(){
+        tImg.src = p.getAttribute('data-img');
+        tCap.textContent = p.getAttribute('data-cap') || '';
+        var b = box.getBoundingClientRect(), r = p.getBoundingClientRect();
+        var x = r.left - b.left + 14, y = r.top - b.top - 20;
+        tip.classList.add('show');
+        var w = tip.offsetWidth, h = 270;
+        if(x + w > b.width) x = r.left - b.left - w - 14;
+        if(x < 0) x = 4;
+        if(y + h > b.height) y = b.height - h - 4;
+        if(y < 0) y = 4;
+        tip.style.left = x + 'px'; tip.style.top = y + 'px';
+      });
+      p.addEventListener('mouseleave', function(){ tip.classList.remove('show'); });
+    });
+  })();
 </script>
 
 </body>
