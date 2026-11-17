@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MM 25 — Machinery Pass (Box Culvert)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#faf7f1;
+    --panel:#ffffff;
+    --ink:#2b2824;
+    --ink-soft:#716a60;
+    --rule:#e4ddd0;
+    --accent:#a8632c;
+    --accent-soft:#f2e3d2;
+    --pin:#c9742f;
+    --pin-feature:#5b6e4f;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:'Inter',system-ui,sans-serif;
+    font-size:16px;
+    line-height:1.55;
+  }
+  h1,h2,h3{
+    font-family:'Inter',system-ui,sans-serif;
+    font-weight:700;
+    letter-spacing:-0.01em;
+    margin:0 0 .5em;
+    text-wrap:balance;
+  }
+  .wrap{max-width:980px;margin:0 auto;padding:0 24px;}
+  a{color:var(--accent);}
+
+  /* Header */
+  header.hero{padding:56px 0 0;}
+  .mm-label{
+    font-size:13px;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    color:var(--ink-soft);
+    margin-bottom:6px;
+  }
+  .mm-number{
+    font-family:'Inter',system-ui,sans-serif;
+    font-size:clamp(40px,7vw,64px);
+    font-weight:700;
+    line-height:1;
+    margin:0;
+  }
+  .mm-type{
+    font-size:17px;
+    color:var(--ink-soft);
+    margin-top:8px;
+  }
+  .cover-wrap{margin:32px 0 0;}
+  .cover-wrap img{
+    width:100%;
+    height:clamp(260px,42vw,460px);
+    object-fit:cover;
+    display:block;
+    border-radius:4px;
+  }
+  .cover-extra{
+    display:flex;
+    align-items:flex-start;
+    gap:12px;
+    margin-top:12px;
+  }
+  .cover-extra img{
+    height:280px;
+    width:auto;
+    max-width:100%;
+    flex:0 0 auto;
+    display:block;
+    border-radius:4px;
+    cursor:pointer;
+  }
+  @media(max-width:640px){
+    .cover-extra{flex-wrap:wrap;}
+    .cover-extra img{height:180px;}
+  }
+
+  section{padding:56px 0;border-top:1px solid var(--rule);}
+  section:first-of-type{border-top:none;}
+  #existing-sections{border-top:none;padding-top:0;}
+  section h2{font-size:26px;}
+
+  /* Fact sheet */
+  .factgrid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    gap:28px 36px;
+    margin-top:28px;
+  }
+  .fact-block h3{
+    font-family:'Inter',sans-serif;
+    font-weight:600;
+    font-size:13px;
+    text-transform:uppercase;
+    letter-spacing:.06em;
+    color:var(--ink-soft);
+    margin-bottom:10px;
+  }
+  .fact-row{display:flex;justify-content:space-between;gap:12px;padding:6px 0;border-bottom:1px solid var(--rule);font-size:14.5px;}
+  .fact-row:last-child{border-bottom:none;}
+  .fact-row .k{color:var(--ink-soft);}
+  .fact-row .v{text-align:right;font-weight:500;}
+  .fact-row .v a{color:var(--accent);text-decoration:none;}
+  .fact-row .v a:hover{text-decoration:underline;}
+  .desc{
+    margin:28px 0 0;
+    padding:16px 20px;
+    background:transparent;
+    border:1px dashed var(--rule);
+    border-radius:4px;
+    font-size:14px;
+    color:var(--ink-soft);
+    font-style:italic;
+  }
+  .stip-note{
+    margin-top:28px;
+  }
+  .stip-note h3{
+    font-family:'Inter',sans-serif;
+    font-weight:600;
+    font-size:13px;
+    text-transform:uppercase;
+    letter-spacing:.06em;
+    color:var(--ink-soft);
+    margin-bottom:10px;
+  }
+  .stip-card{
+    background:var(--panel);
+    border:1px solid var(--rule);
+    border-radius:6px;
+    padding:18px 20px;
+  }
+
+  /* Zoom box */
+  .maptools{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:12px;}
+  .maptabs{display:flex;gap:8px;flex-wrap:wrap;}
+  .mtab.on{background:var(--ink);color:#fff;border-color:var(--ink);}
+  .mtab.on:hover{color:#fff;}
+  .zoombtn{
+    font-family:'Inter',sans-serif;
+    font-size:13.5px;
+    font-weight:500;
+    color:var(--ink);
+    background:var(--panel);
+    border:1px solid var(--rule);
+    border-radius:20px;
+    padding:8px 16px;
+    cursor:pointer;
+  }
+  .zoombtn:hover{border-color:var(--accent);color:var(--accent);}
+  .zbox{
+    position:relative;
+    overflow:hidden;
+    border-radius:6px;
+    border:1px solid var(--rule);
+    background:#000;
+  }
+  .zbox img{display:block;width:100%;height:auto;transition:transform .5s ease;}
+  .zbox.zoomed img{transform:translate(var(--tx,0%),var(--ty,0%)) scale(var(--zs,2.5));transform-origin:var(--ox,50%) var(--oy,50%);}
+
+  table.summary{width:100%;border-collapse:collapse;margin-top:22px;font-size:14.5px;}
+  table.summary th,table.summary td{text-align:left;padding:10px 14px;border-bottom:1px solid var(--rule);}
+  table.summary th{color:var(--ink-soft);font-weight:600;font-size:12.5px;text-transform:uppercase;letter-spacing:.04em;}
+  table.summary tr:last-child td{border-bottom:none;}
+
+  /* Site map + pins */
+  .sitebox{position:relative;border-radius:6px;overflow:hidden;border:1px solid var(--rule);}
+  .sitebox img{display:block;width:100%;height:auto;}
+  .pin{
+    position:absolute;
+    width:1px;height:1px;
+    cursor:pointer;
+  }
+  .pin::before{
+    /* direction arrow: points the way the photo was taken, rotated by --dir (compass degrees, north-up) */
+    content:'';
+    position:absolute;
+    left:0;top:0;
+    width:0;height:0;
+    border-left:6px solid transparent;
+    border-right:6px solid transparent;
+    border-bottom:15px solid var(--c);
+    transform-origin:50% 100%;
+    transform:translate(-50%,-100%) rotate(var(--dir,0deg));
+    filter:drop-shadow(0 1px 2px rgba(0,0,0,.45));
+  }
+  .pin::after{
+    /* base dot: the camera's GPS point */
+    content:'';
+    position:absolute;
+    left:0;top:0;
+    width:9px;height:9px;
+    margin:-4.5px 0 0 -4.5px;
+    border-radius:50%;
+    background:var(--c);
+    border:2px solid #fff;
+    box-shadow:0 1px 2px rgba(0,0,0,.4);
+  }
+  .pin.site{--c:var(--pin);}
+  .pin.feature{--c:var(--pin-feature);}
+  .legend-row{display:flex;gap:22px;margin-top:14px;font-size:13px;color:var(--ink-soft);flex-wrap:wrap;}
+  .legend-row span{display:inline-flex;align-items:center;gap:7px;}
+  .dot{width:10px;height:10px;border-radius:50%;display:inline-block;}
+  .dot.site{background:var(--pin);}
+  .dot.feature{background:var(--pin-feature);}
+
+  /* Trail cam grid */
+  .camgrid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+    gap:18px;
+    margin-top:28px;
+  }
+  .camgrid figure{margin:0;}
+  .camgrid img{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:6px;display:block;cursor:pointer;}
+  .camgrid figcaption{margin-top:8px;font-size:13px;color:var(--ink-soft);}
+
+  .sectiongrid{
+    display:flex;
+    flex-direction:row;
+    align-items:flex-start;
+    gap:24px;
+    margin-top:28px;
+  }
+  .sectiongrid figure{margin:0;min-width:0;}
+  .sectiongrid figure.sec-road{flex:306 0 0;}
+  .sectiongrid figure.sec-bridge{flex:589 0 0;}
+  .sectiongrid img{
+    width:100%;
+    height:auto;
+    display:block;
+    border:1px solid var(--rule);
+    border-radius:6px;
+    background:#fff;
+  }
+  .sectiongrid figcaption{margin-top:8px;font-size:13px;color:var(--ink-soft);}
+
+  .placeholder-frame{
+    margin-top:28px;
+    border:1px dashed var(--rule);
+    border-radius:6px;
+    min-height:220px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:var(--ink-soft);
+    font-size:14.5px;
+    background:var(--panel);
+  }
+  p.flag{
+    margin-top:14px;
+    font-size:14px;
+    color:var(--ink);
+  }
+  p.flag b{font-weight:600;}
+
+  /* Draft recommendations */
+  .reclist{display:grid;grid-template-columns:1fr 1fr;gap:36px 40px;margin-top:8px;}
+  #draft-recommendations{background:#fff;color:var(--ink);}
+  .rec{border-top:1px solid var(--rule);padding-top:14px;display:flex;flex-direction:column;}
+  .rec h3{font-size:17px;margin:0 0 4px;}
+  .rec h3 span{margin-right:8px;}
+  .rec p{margin:0 0 14px;font-size:15px;}
+  .rec .recimg{width:100%;height:200px;object-fit:contain;object-position:left center;cursor:pointer;display:block;margin-top:auto;}
+  .rec .recimg.sub1a{padding:26px 0;}
+  .logos{background:#fff;padding:8px 0 56px;}
+  .logos .wrap{display:flex;align-items:center;gap:36px;flex-wrap:wrap;border-top:1px solid var(--rule);padding-top:32px;}
+  .logos img{display:block;height:24px;width:auto;}
+  .logos img.l-wmi{height:30px;}
+  .hero .wrap{position:relative;}
+  .draft-stamp{position:absolute;top:-30px;right:24px;font-size:14px;color:#c62828;text-transform:uppercase;}
+  /* Lightbox */
+  .lightbox{
+    position:fixed;inset:0;background:rgba(20,17,13,.92);
+    display:none;align-items:center;justify-content:center;
+    z-index:50;padding:32px;flex-direction:column;
+  }
+  .lightbox.open{display:flex;}
+  .lightbox img{max-width:92vw;max-height:80vh;border-radius:4px;}
+  .lightbox .cap{color:#f2ece1;margin-top:14px;font-size:14px;}
+  .lightbox .close{position:absolute;top:22px;right:28px;color:#f2ece1;font-size:28px;cursor:pointer;background:none;border:none;line-height:1;}
+
+  footer{padding:40px 0 64px;font-size:12.5px;color:var(--ink-soft);}
+
+  @media(max-width:640px){
+    .fact-row .v{text-align:right;}
+    section{padding:40px 0;}
+    .reclist{grid-template-columns:1fr;}
+    .sectiongrid{flex-direction:column;}
+    .sectiongrid figure.sec-road,.sectiongrid figure.sec-bridge{flex:0 0 auto;width:100%;}
+  }
+</style>
+</head>
+<body>
+<header class="hero">
+  <div class="wrap">
+    <div class="draft-stamp">Draft</div>
+    <div class="mm-label">Mile Marker</div>
+    <h1 class="mm-number">25</h1>
+    <div class="mm-type">Machinery Pass &middot; Box Culvert</div>
+    <div class="cover-wrap">
+      <img src="img/site-cover.jpg" alt="Cover photo of the MM 25 structure">
+    </div>
+  </div>
+</header>
+
+<section id="fact-sheet">
+  <div class="wrap">
+    <h2>Fact sheet</h2>
+    <div class="factgrid">
+      <div class="fact-block">
+        <h3>Structure</h3>
+        <div class="fact-row"><span class="k">Name</span><span class="v">Not recorded</span></div>
+        <div class="fact-row"><span class="k">Type (by function)</span><span class="v">Machinery Pass</span></div>
+        <div class="fact-row"><span class="k">Type (by design)</span><span class="v">Box Culvert</span></div>
+        <div class="fact-row"><span class="k">Structure design</span><span class="v">Box culvert (non-WYDOT nomenclature)</span></div>
+        <div class="fact-row"><span class="k">Year built</span><span class="v">Not recorded</span></div>
+        <div class="fact-row"><span class="k">Condition</span><span class="v">Not recorded</span></div>
+        <div class="fact-row"><span class="k">County</span><span class="v">Uinta</span></div>
+        <div class="fact-row"><span class="k">Study region</span><span class="v">Uinta</span></div>
+        <div class="fact-row"><span class="k">Location</span><span class="v"><a href="https://maps.app.goo.gl/AQMTWzxGHaGnkykn7" target="_blank" rel="noopener">View on Google Maps</a></span></div>
+      </div>
+      <div class="fact-block">
+        <h3>Jurisdiction &amp; ownership</h3>
+        <div class="fact-row"><span class="k">WYDOT District</span><span class="v">3</span></div>
+        <div class="fact-row"><span class="k">WYDOT State-owned bridge</span><span class="v">No</span></div>
+        <div class="fact-row"><span class="k">Owner, north side</span><span class="v">Micheli Land and Livestock LLC</span></div>
+        <div class="fact-row"><span class="k">Owner, south side</span><span class="v">Micheli Cattle Company LLC</span></div>
+        <div class="fact-row"><span class="k">BLM Field Office</span><span class="v">Not recorded</span></div>
+        <div class="fact-row"><span class="k">BLM Allotment</span><span class="v">Not recorded</span></div>
+        <div class="fact-row"><span class="k">WFGD District, north</span><span class="v">Mountain View</span></div>
+        <div class="fact-row"><span class="k">WFGD District, south</span><span class="v">Mountain View</span></div>
+        <div class="fact-row"><span class="k">Biologist, north</span><span class="v">Jeff Short</span></div>
+        <div class="fact-row"><span class="k">Biologist, south</span><span class="v">Jeff Short</span></div>
+      </div>
+      <div class="fact-block">
+        <h3>Livestock use</h3>
+        <div class="fact-row"><span class="k">May use for domestic sheep or goat grazing (BLM)</span><span class="v">Not recorded</span></div>
+      </div>
+    </div>
+
+    <div class="stip-note">
+      <h3>WYDOT STIP</h3>
+      <div class="stip-card">
+        <div class="fact-row"><span class="k">Listed in STIP 2026&ndash;31</span><span class="v">Not recorded</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="wildlife-use">
+  <div class="wrap">
+    <h2>Wildlife use</h2>
+    <div class="maptools" style="justify-content:flex-end;">
+      <button class="zoombtn" id="zoomWildlife" type="button">Zoom to site</button>
+    </div>
+    <div class="zbox" id="wildlifeZbox" style="--ox:52.2%; --oy:66.5%; --tx:-2.2%; --ty:-16.5%; --zs:3;">
+      <img id="wildlifeImg" src="img/wildlife-use-map.jpg" alt="Wildlife use map for MM 25 showing GPS tracks, roadkill and documented structure crossings along this stretch of I-80">
+    </div>
+    <p class="cap" id="wildlifeCap" style="color:var(--ink-soft); font-size:13px; margin-top:10px;">Sources: Western Migrations, WYDOT, University of Wyoming.</p>
+
+    <table class="summary">
+      <thead>
+        <tr><th>Monitoring period</th><th>Data source</th><th>Metric</th><th>Result</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>2022 &ndash; 2023</td><td>Uinta Study (NU6)</td><td>Total mule deer movement (number of individuals)</td><td>1,289 (920 northerly, 369 southerly)</td></tr>
+        <tr><td>2021 &ndash; 2023</td><td>Uinta Study (NU6)</td><td>Total mule deer movement (number of individuals)</td><td>1,770 (1,156 northerly, 614 southerly)</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section id="trail-cameras">
+  <div class="wrap">
+    <h2>Trail camera photos</h2>
+    <div class="camgrid">
+      <figure><img src="img/cam-12302022.jpg" data-cap="December 30, 2022" alt="Trail camera photo, December 30, 2022"><figcaption>December 30, 2022</figcaption></figure>
+    </div>
+  </div>
+</section>
+
+<section id="existing-site-map">
+  <div class="wrap">
+    <h2>Existing site map</h2>
+    <div class="sitebox" id="siteBox">
+      <img src="img/existing-site-map.jpg" alt="Existing site plan for MM 25 showing fence lines and features near the structure">
+      <div class="pin site" style="left:51.66%; top:41.03%; --dir:181.9deg;" data-img="img/site-cover.jpg" data-cap="Cover"></div>
+      <div class="pin site" style="left:49.63%; top:52.96%; --dir:18.5deg;" data-img="img/site-c-n.jpg" data-cap="Center, looking north"></div>
+      <div class="pin site" style="left:51.55%; top:57.95%; --dir:172.8deg;" data-img="img/site-c-s.jpg" data-cap="Center, looking south"></div>
+      <div class="pin site" style="left:52.32%; top:40.72%; --dir:180.6deg;" data-img="img/site-n.jpg" data-cap="North"></div>
+      <div class="pin site" style="left:50.43%; top:61.20%; --dir:351.6deg;" data-img="img/site-s.jpg" data-cap="South"></div>
+    </div>
+    <div class="legend-row">
+      <span><span class="dot site"></span>Site photo</span>
+    </div>
+    <p class="cap" style="color:var(--ink-soft); font-size:13px; margin-top:16px;">Click on pins to see photos. Arrows show the direction each photo was taken. Pin positions are approximate.</p>
+  </div>
+</section>
+
+<section id="existing-sections">
+  <div class="wrap">
+    <h2>Existing sections</h2>
+    <div class="sectiongrid">
+      <figure class="sec-road">
+        <img src="img/section-ew.jpg" data-cap="E-W Section at MM 25" alt="East-west section at MM 25 showing the 14 foot high box culvert opening with a 14 foot dirt road, 62 feet overall, between wildlife exclusionary fences" style="cursor:pointer;">
+        <figcaption>E-W Section</figcaption>
+      </figure>
+      <figure class="sec-bridge">
+        <img src="img/section-ns.jpg" data-cap="N-S Section at MM 25" alt="North-south section at MM 25 showing the 135 foot long, 14 foot high box culvert under I-80" style="cursor:pointer;">
+        <figcaption>N-S Section</figcaption>
+      </figure>
+    </div>
+    <p class="flag"><b>Note:</b> all dimensions are approximate and to be verified in the field.</p>
+  </div>
+</section>
+
+<section id="draft-recommendations">
+  <div class="wrap">
+    <h2>Draft recommendations</h2>
+    <div class="reclist">
+      <div class="rec">
+        <h3><span>1a</span>Preserve existing structures that facilitate movement</h3>
+        <p>Work with DOT to preserve already functional structures</p>
+        <img class="recimg sub1a" src="img/sub-1a.png" alt="Sketch of substrategy 1a" data-cap="Substrategy 1a: Work with DOT to preserve already functional structures" loading="lazy">
+      </div>
+      <div class="rec">
+        <h3><span>1b</span>Preserve existing structures that facilitate movement</h3>
+        <p>Preserve potentially functional structures with contextual changes</p>
+        <img class="recimg " src="img/list-1b.png" alt="Sketch of substrategy 1b" data-cap="Substrategy 1b: Preserve potentially functional structures with contextual changes" loading="lazy">
+      </div>
+      <div class="rec">
+        <h3><span>5a</span>Improve surrounding landscape</h3>
+        <p>Remove internal property fences</p>
+        <img class="recimg " src="img/list-5a.png" alt="Sketch of substrategy 5a" data-cap="Substrategy 5a: Remove internal property fences" loading="lazy">
+      </div>
+    </div>
+    <p class="flag"><b>Note:</b> draft for review.</p>
+  </div>
+</section>
+
+<footer class="logos">
+  <div class="wrap">
+    <img class="l-wmi" src="img/logo-wyo-coop-unit.png" alt="Wyoming Cooperative Fish and Wildlife Research Unit">
+    <img src="img/logo-3fwild.png" alt="3FWILD">
+  </div>
+</footer>
+
+<div class="lightbox" id="lightbox">
+  <button class="close" id="lbClose" aria-label="Close">&times;</button>
+  <img id="lbImg" src="" alt="">
+  <div class="cap" id="lbCap"></div>
+</div>
+
+<script>
+  var zbox = document.getElementById('wildlifeZbox');
+  var zbtn = document.getElementById('zoomWildlife');
+  zbtn.addEventListener('click', function(){
+    zbox.classList.toggle('zoomed');
+    zbtn.textContent = zbox.classList.contains('zoomed') ? 'Show full map' : 'Zoom to site';
+  });
+  var lb = document.getElementById('lightbox');
+  var lbImg = document.getElementById('lbImg');
+  var lbCap = document.getElementById('lbCap');
+  function openLightbox(src, cap){ lbImg.src = src; lbCap.textContent = cap || ''; lb.classList.add('open'); }
+  document.getElementById('lbClose').addEventListener('click', function(){ lb.classList.remove('open'); });
+  lb.addEventListener('click', function(e){ if(e.target === lb) lb.classList.remove('open'); });
+  document.querySelectorAll('.pin').forEach(function(p){
+    p.addEventListener('click', function(){ openLightbox(p.getAttribute('data-img'), p.getAttribute('data-cap')); });
+  });
+  document.querySelectorAll('.camgrid img, .sectiongrid img, .cover-extra img, .rec .recimg').forEach(function(img){
+    img.addEventListener('click', function(){ openLightbox(img.getAttribute('src'), img.getAttribute('data-cap')); });
+  });
+  var wildlifeImg = document.getElementById('wildlifeImg');
+  wildlifeImg.style.cursor = 'pointer';
+  wildlifeImg.addEventListener('click', function(){ openLightbox(wildlifeImg.getAttribute('src'), 'Wildlife use map'); });
+  var siteMapImg = document.querySelector('#siteBox img');
+  siteMapImg.style.cursor = 'pointer';
+  siteMapImg.addEventListener('click', function(){ openLightbox(siteMapImg.getAttribute('src'), 'Existing site map'); });
+</script>
+
+</body>
+</html>
