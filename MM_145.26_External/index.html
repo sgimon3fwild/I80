@@ -278,6 +278,8 @@
   .logos .wrap{display:flex;align-items:center;gap:36px;flex-wrap:wrap;border-top:1px solid var(--rule);padding-top:32px;}
   .logos img{display:block;height:24px;width:auto;}
   .logos img.l-wmi{height:30px;}
+  .hero .wrap{position:relative;}
+  .draft-stamp{position:absolute;top:-30px;right:24px;font-size:14px;color:#c62828;text-transform:uppercase;}
   /* Lightbox */
   .lightbox{
     position:fixed;inset:0;background:rgba(20,17,13,.92);
@@ -304,6 +306,7 @@
 
 <header class="hero">
   <div class="wrap">
+    <div class="draft-stamp">Draft</div>
     <div class="mm-label">Mile Marker</div>
     <h1 class="mm-number">145.26</h1>
     <div class="mm-type">Machinery Pass &middot; Bridge</div>
@@ -475,8 +478,8 @@
 
 <footer class="logos">
   <div class="wrap">
-    <img src="img/logo-3fwild.png" alt="3FWILD">
     <img class="l-wmi" src="img/logo-wyo-coop-unit.png" alt="Wyoming Cooperative Fish and Wildlife Research Unit">
+    <img src="img/logo-3fwild.png" alt="3FWILD">
   </div>
 </footer>
 
