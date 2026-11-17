@@ -143,7 +143,10 @@
   }
 
   /* Zoom box */
-  .maptools{display:flex;justify-content:flex-end;margin-bottom:12px;}
+  .maptools{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:12px;}
+  .maptabs{display:flex;gap:8px;flex-wrap:wrap;}
+  .mtab.on{background:var(--ink);color:#fff;border-color:var(--ink);}
+  .mtab.on:hover{color:#fff;}
   .zoombtn{
     font-family:'Inter',sans-serif;
     font-size:13.5px;
@@ -164,7 +167,7 @@
     background:#000;
   }
   .zbox img{display:block;width:100%;height:auto;transition:transform .5s ease;}
-  .zbox.zoomed img{transform:scale(2.5);transform-origin:var(--ox,50%) var(--oy,50%);}
+  .zbox.zoomed img{transform:translate(var(--tx,0%),var(--ty,0%)) scale(var(--zs,2.5));transform-origin:var(--ox,50%) var(--oy,50%);}
 
   table.summary{width:100%;border-collapse:collapse;margin-top:22px;font-size:14.5px;}
   table.summary th,table.summary td{text-align:left;padding:10px 14px;border-bottom:1px solid var(--rule);}
@@ -360,12 +363,16 @@
     <h2>Wildlife use</h2>
     <div class="desc" style="margin-top:0; margin-bottom:28px;">The area adjacent to the structure is used by pronghorn and mule deer as documented through GPS tracking and recorded roadkill. The structure at MM 145.26 is used by pronghorn to cross the interstate as documented by monitoring with trail cameras. Some of the access to the crossing structure may be limited by the nearby railroad. The area around the crossing structures may see fewer collisions than the adjacent area without access to crossing structures.</div>
     <div class="maptools">
+      <div class="maptabs" role="tablist">
+        <button class="zoombtn mtab on" type="button" role="tab" aria-selected="true" data-tab="use">Existing wildlife use</button>
+        <button class="zoombtn mtab" type="button" role="tab" aria-selected="false" data-tab="pred">Predictive migration routes</button>
+      </div>
       <button class="zoombtn" id="zoomWildlife" type="button">Zoom to site</button>
     </div>
     <div class="zbox" id="wildlifeZbox" style="--ox:63.5%; --oy:52.8%;">
-      <img src="img/wildlife-use-map.jpg" alt="Wildlife use map showing pronghorn and deer crossings, roadkill, and documented structure crossings along this stretch of I-80">
+      <img id="wildlifeImg" src="img/wildlife-use-map.jpg" alt="Wildlife use map showing pronghorn and deer crossings, roadkill, and documented structure crossings along this stretch of I-80">
     </div>
-    <p class="cap" style="color:var(--ink-soft); font-size:13px; margin-top:10px;">Sources: Western Migrations, WYDOT, University of Wyoming.</p>
+    <p class="cap" id="wildlifeCap" style="color:var(--ink-soft); font-size:13px; margin-top:10px;">Sources: Western Migrations, WYDOT, University of Wyoming.</p>
 
     <table class="summary">
       <thead>
@@ -500,11 +507,28 @@
     });
   });
 
-  // Wildlife map: click to open full screen in the lightbox
-  var wildlifeImg = document.querySelector('#wildlifeZbox img');
+  // Wildlife map: tabs (existing use / predicted movement), click to open full screen in the lightbox
+  var wildlifeImg = document.getElementById('wildlifeImg');
+  var wildlifeCap = document.getElementById('wildlifeCap');
+  var TABS = {
+    use: {src:'img/wildlife-use-map.jpg', zoom:'--ox:63.5%; --oy:52.8%;', title:'Wildlife use map', alt:'Wildlife use map showing pronghorn and deer crossings, roadkill, and documented structure crossings along this stretch of I-80', cap:'Sources: Western Migrations, WYDOT, University of Wyoming.'},
+    pred: {src:'img/predictive-migration-routes.jpg', zoom:'--ox:37%; --oy:47.5%; --tx:13%; --ty:17.5%; --zs:4;', title:'Predictive migration routes map', alt:'Predictive migration routes map for pronghorn across southern Wyoming along I-80, with MM 145.26 labeled', cap:'Source: Ben Robb, University of Wyoming.'}
+  };
+  var curTab = 'use';
+  document.querySelectorAll('.mtab').forEach(function(b){
+    b.addEventListener('click', function(){
+      curTab = b.getAttribute('data-tab');
+      var t = TABS[curTab];
+      wildlifeImg.src = t.src; wildlifeImg.alt = t.alt; wildlifeCap.textContent = t.cap;
+      document.getElementById('wildlifeZbox').setAttribute('style', t.zoom);
+      document.querySelectorAll('.mtab').forEach(function(x){
+        var on = x === b; x.classList.toggle('on', on); x.setAttribute('aria-selected', on);
+      });
+    });
+  });
   wildlifeImg.style.cursor = 'pointer';
   wildlifeImg.addEventListener('click', function(){
-    openLightbox(wildlifeImg.getAttribute('src'), 'Wildlife use map');
+    openLightbox(wildlifeImg.getAttribute('src'), TABS[curTab].title);
   });
 
   // Existing site map: click the base map (not a pin) to open full screen in the lightbox
