@@ -262,6 +262,15 @@
   }
   p.flag b{font-weight:600;}
 
+  /* Draft recommendations */
+  .reclist{display:grid;grid-template-columns:1fr 1fr;gap:36px 40px;margin-top:8px;}
+  #draft-recommendations{background:#fff;color:var(--ink);}
+  .rec{border-top:1px solid var(--rule);padding-top:14px;display:flex;flex-direction:column;}
+  .rec h3{font-size:17px;margin:0 0 4px;}
+  .rec h3 span{margin-right:8px;}
+  .rec p{margin:0 0 14px;font-size:15px;}
+  .rec .recimg{width:100%;height:200px;object-fit:contain;object-position:left center;cursor:pointer;display:block;margin-top:auto;}
+  .rec .recimg.sub1a{padding:26px 0;}
   /* Lightbox */
   .lightbox{
     position:fixed;inset:0;background:rgba(20,17,13,.92);
@@ -278,6 +287,7 @@
   @media(max-width:640px){
     .fact-row .v{text-align:right;}
     section{padding:40px 0;}
+    .reclist{grid-template-columns:1fr;}
     .sectiongrid{flex-direction:column;}
     .sectiongrid figure.sec-road,.sectiongrid figure.sec-bridge{flex:0 0 auto;width:100%;}
   }
@@ -423,6 +433,35 @@
   </div>
 </section>
 
+<section id="draft-recommendations">
+  <div class="wrap">
+    <h2>Draft recommendations</h2>
+    <div class="reclist">
+      <div class="rec">
+        <h3><span>1a</span>Preserve existing structures that facilitate movement</h3>
+        <p>Work with DOT to preserve already functional structures</p>
+        <img class="recimg sub1a" src="img/sub-1a.png" alt="Sketch of substrategy 1a" data-cap="Substrategy 1a: Work with DOT to preserve already functional structures" loading="lazy">
+      </div>
+      <div class="rec">
+        <h3><span>2b</span>Funnel movement to structures</h3>
+        <p>Where cattle fencing is at entrances to structures, replace with wildlife-friendly design</p>
+        <img class="recimg " src="img/sub-2b.png" alt="Sketch of substrategy 2b" data-cap="Substrategy 2b: Where cattle fencing is at entrances to structures, replace with wildlife-friendly design" loading="lazy">
+      </div>
+      <div class="rec">
+        <h3><span>4a</span>Retrofit existing structures to improve wildlife use</h3>
+        <p>Remove obstacles</p>
+        <img class="recimg " src="img/sub-4a.png" alt="Sketch of substrategy 4a" data-cap="Substrategy 4a: Remove obstacles" loading="lazy">
+      </div>
+      <div class="rec">
+        <h3><span>6a</span>Introduce regional improvements</h3>
+        <p>Unlock potential of existing structures by introducing crossings elsewhere</p>
+        <img class="recimg " src="img/list-6a.png" alt="Sketch of substrategy 6a" data-cap="Substrategy 6a: Unlock potential of existing structures by introducing crossings elsewhere" loading="lazy">
+      </div>
+    </div>
+    <p class="flag"><b>Note:</b> draft for review.</p>
+  </div>
+</section>
+
 <div class="lightbox" id="lightbox">
   <button class="close" id="lbClose" aria-label="Close">&times;</button>
   <img id="lbImg" src="" alt="">
@@ -455,7 +494,7 @@
       openLightbox(p.getAttribute('data-img'), p.getAttribute('data-cap'));
     });
   });
-  document.querySelectorAll('.camgrid img, .sectiongrid img, .cover-extra img').forEach(function(img){
+  document.querySelectorAll('.camgrid img, .sectiongrid img, .cover-extra img, .rec .recimg').forEach(function(img){
     img.addEventListener('click', function(){
       openLightbox(img.getAttribute('src'), img.getAttribute('data-cap'));
     });
